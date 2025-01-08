@@ -39,13 +39,19 @@
         .menu-item {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin: 10px 0;
             border-bottom: 1px dashed #ccc;
             padding-bottom: 5px;
+            cursor: pointer;
         }
 
         .menu-item span {
             font-weight: bold;
+        }
+
+        .menu-item.selected {
+            background-color: #d4edda;
         }
 
         /* Contact Section */
@@ -93,29 +99,29 @@
 
     <section class="menu">
         <h2>🍝 Dishes</h2>
-        <div class="menu-item">
+        <div class="menu-item" onclick="toggleItem(this, 'Spaghetti Bolognese')">
             <span>Spaghetti Bolognese</span>
             <span>$12.99</span>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" onclick="toggleItem(this, 'Grilled Salmon')">
             <span>Grilled Salmon</span>
             <span>$18.99</span>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" onclick="toggleItem(this, 'Caesar Salad')">
             <span>Caesar Salad</span>
             <span>$9.99</span>
         </div>
 
         <h2>🥤 Beverages</h2>
-        <div class="menu-item">
+        <div class="menu-item" onclick="toggleItem(this, 'Fresh Lemonade')">
             <span>Fresh Lemonade</span>
             <span>$3.50</span>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" onclick="toggleItem(this, 'Red Wine (Glass)')">
             <span>Red Wine (Glass)</span>
             <span>$5.00</span>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" onclick="toggleItem(this, 'Coffee')">
             <span>Coffee</span>
             <span>$2.50</span>
         </div>
@@ -123,7 +129,7 @@
 
     <section class="contact">
         <h2>📲 Contact Us</h2>
-        <p>If you have any questions or want to place an order, reach out to us on WhatsApp!</p>
+        <p>If you have selected your items, reach out to us on WhatsApp!</p>
         <button onclick="sendWhatsAppMessage()">Send us a Message</button>
     </section>
 
@@ -132,10 +138,34 @@
     </footer>
 
     <script>
+        const selectedItems = [];
+
+        // Toggle Menu Item Selection
+        function toggleItem(element, itemName) {
+            if (selectedItems.includes(itemName)) {
+                selectedItems.splice(selectedItems.indexOf(itemName), 1); // Remove item
+                element.classList.remove('selected');
+            } else {
+                selectedItems.push(itemName); // Add item
+                element.classList.add('selected');
+            }
+        }
+
+        // Send WhatsApp Message with Selected Items
         function sendWhatsAppMessage() {
-            const phoneNumber = '1234567890'; // Replace with your real WhatsApp number
-            const message = encodeURIComponent("Hello! I'd like to know more about your menu.");
-            window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+            const phoneNumber = '5511980416617'; // Replace with your WhatsApp number
+            let message = "Hello! I'd like to order the following items:\n";
+
+            if (selectedItems.length > 0) {
+                selectedItems.forEach((item, index) => {
+                    message += `${index + 1}. ${item}\n`;
+                });
+            } else {
+                message = "Hello! I'd like to know more about your menu.";
+            }
+
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
         }
     </script>
 </body>
